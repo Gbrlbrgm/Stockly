@@ -30,7 +30,7 @@ import {
 import { formatCurrency } from "@/app/_helpers/currency";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Product } from "@prisma/client";
-import { MoreHorizontalIcon, PlusIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -81,6 +81,15 @@ const UpsertSheetContent = ({
         (product) => product.id === selectedProduct.id,
       );
       if (existingProduct) {
+        const productIsOutOfStock =
+          existingProduct.quantity + data.quantity > selectedProduct.stock;
+        if (productIsOutOfStock) {
+          form.setError("quantity", {
+            message: "Quantidade indisponível em estoque.",
+          });
+          return currentProducts;
+        }
+        form.reset();
         return currentProducts.map((product) => {
           if (product.id === selectedProduct.id) {
             return {
@@ -91,6 +100,14 @@ const UpsertSheetContent = ({
           return product;
         });
       }
+      const productIsOutOfStock = data.quantity > selectedProduct.stock;
+      if (productIsOutOfStock) {
+        form.setError("quantity", {
+          message: "Quantidade indisponível em estoque.",
+        });
+        return currentProducts;
+      }
+      form.reset();
       return [
         ...currentProducts,
         {
@@ -100,9 +117,7 @@ const UpsertSheetContent = ({
         },
       ];
     });
-    form.reset();
   };
-
   const productsTotal = useMemo(() => {
     return selectedProducts.reduce((acc, product) => {
       return acc + product.price * product.quantity;
@@ -114,7 +129,6 @@ const UpsertSheetContent = ({
       return currentProducts.filter((product) => product.id !== productId);
     });
   };
-
   return (
     <SheetContent className="!max-w-[700px]">
       <SheetHeader>
