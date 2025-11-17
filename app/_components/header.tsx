@@ -12,7 +12,7 @@ export const HeaderSubtitle = ({ children }: { children: ReactNode }) => {
 };
 
 export const HeaderLeft = ({ children }: { children: ReactNode }) => {
-  return <div className="space-y-1"></div>;
+  return <div className="space-y-1">{children}</div>;
 };
 
 export const HeaderRight = ({ children }: { children: ReactNode }) => {
@@ -27,9 +27,7 @@ const Header = ({
   className?: string;
 }) => {
   return (
-    <div
-      className={(cn("flex w-full items-center justify-between"), className)}
-    >
+    <div className={cn("flex w-full items-center justify-between", className)}>
       {children}
     </div>
   );
