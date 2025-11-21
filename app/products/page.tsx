@@ -9,6 +9,8 @@ import Header, {
   HeaderTitle,
 } from "../_components/header";
 
+export const dynamic = "force-static";
+
 const ProductsPage = async () => {
   const products = await getProducts();
   return (
