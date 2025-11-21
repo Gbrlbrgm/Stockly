@@ -51,7 +51,7 @@ const UpsertProductDialogContent = ({
   });
   const form = useForm<UpsertProductSchema>({
     shouldUnregister: true,
-    resolver: zodResolver(upsertProductSchema) as any,
+    resolver: zodResolver(upsertProductSchema),
     defaultValues: defaultValues ?? {
       id: "",
       name: "",
